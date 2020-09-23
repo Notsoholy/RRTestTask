@@ -8,4 +8,8 @@
     <Folder Include="Repositories\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RRTestTask.Domain\RRTestTask.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

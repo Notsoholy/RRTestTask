@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net.Mail;
-using System.Text;
 using RRTestTask.Abstraction.Services;
-using S22.Imap;
+using MailKit;
+using MimeKit;
+using MailKit.Net.Imap;
+using System.Linq;
+using System.IO;
 
 namespace RRTestTask.Services
 {
@@ -12,30 +13,49 @@ namespace RRTestTask.Services
         private readonly string _username = "rrtesttask";
         private readonly string _password = "testtaskdonotuse";
 
-        public IEnumerable<MailMessage> DownloadAttachments()
+        public void DownloadAttachments()
         {
-            using (ImapClient client = new ImapClient
-                ("imap.gmail.com", 993, _username, _password, AuthMethod.Login, true))
+            using (var client = new ImapClient())
             {
-                IEnumerable<uint> uids = client.Search(SearchCondition.All());
+                client.Connect("imap.gmail.com", 993, true);
 
-                IEnumerable<MailMessage> messages = client.GetMessages(uids,
-                    (Bodypart part) =>
+                client.Authenticate(_username, _password);
+
+                var inbox = client.Inbox;
+                inbox.Open(FolderAccess.ReadOnly);
+
+                GetMessagesWithAttachments(inbox);
+            }
+        }
+
+        private static void GetMessagesWithAttachments(IMailFolder inbox)
+        {
+            for (int i = 0; i < inbox.Count; i++)
+            {
+                var message = inbox.GetMessage(i);
+                GetAttachments(message);
+            }
+        }
+
+        private static void GetAttachments(MimeMessage message)
+        {
+            foreach (var attachment in message.Attachments.Where(a => a.ContentType.Name.EndsWith(".csv", StringComparison.InvariantCultureIgnoreCase)))
+            {
+                var fileName = attachment.ContentDisposition?.FileName ?? attachment.ContentType.Name;
+
+                using (var stream = File.Create(fileName))
+                {
+                    if (attachment is MessagePart rfc822)
                     {
-                        if (part.Disposition.Type == ContentDispositionType.Attachment)
-                        {
-                            if (part.Type == ContentType.Text && part.Subtype.ToLower() == "csv")
-                            {
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
-                            }
-                        }
-                        return true;
-                    });
-                return messages;
+                        rfc822.Message.WriteTo(stream);
+                    }
+                    else
+                    {
+                        var part = attachment as MimePart;
+
+                        part.Content.DecodeTo(stream);
+                    }
+                }
             }
         }
     }
