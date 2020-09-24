@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\RRTestTask.Abstraction\RRTestTask.Abstraction.csproj" />
     <ProjectReference Include="..\RRTestTask.Domain\RRTestTask.Domain.csproj" />
+    <ProjectReference Include="..\RRTestTask.Infrastructure\RRTestTask.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
