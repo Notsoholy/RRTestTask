@@ -17,9 +17,6 @@ namespace RRTestTask.Infrastructure.Repositories
 
         public void Insert(List<PriceItem> priceItems)
         {
-            if (priceItems.Count == 0)
-                throw new ArgumentException("No price items found");
-
             _context.PriceItems.AddRange(priceItems);
             _context.SaveChanges();
         }

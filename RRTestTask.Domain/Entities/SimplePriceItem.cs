@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RRTestTask.Domain
+namespace RRTestTask.Domain.Entities
 {
-    public class PriceItem
+    public class SimplePriceItem
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Vendor { get; set; }
         public string Number { get; set; }
         public string SearchVendor { get; set; }
         public string SearchNumber { get; set; }
         public string Description { get; set; }
-        public double Price { get; set; }
-        public int Count { get; set; }
+        public string Price { get; set; }
+        public string Count { get; set; }
     }
 }

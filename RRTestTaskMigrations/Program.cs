@@ -11,13 +11,10 @@ namespace RRTestTask.Migrations
     {
         static void Main()
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("connectionsettings.json", false);
+            var desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            var db = "PriceItems.db";
 
-            var configuration = builder.Build();
-
-            var databaseConnection = configuration.GetSection("DatabaseConnection").Value;
+            var databaseConnection = $"Data Source = {Path.Combine(desktop, db)}";
 
             var serviceProvider = CreateServices(databaseConnection);
 

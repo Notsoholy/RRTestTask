@@ -7,6 +7,6 @@ namespace RRTestTask.Abstraction.Services
 {
     public interface ICsvDownloader
     {
-        void DownloadAttachments();
+        void DownloadAttachments(string host, string login, string password);
     }
 }
