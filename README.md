@@ -1,6 +1,6 @@
 # RRTestTask
 
-### HowTo
+### HowTo:
 
 Firstly, you need to launch RRTestTask.Migrations, in order to create database and required table.  
 For the sake of brevity and versatility, default location to create database is Desktop folder.  
